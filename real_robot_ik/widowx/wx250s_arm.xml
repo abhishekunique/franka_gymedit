@@ -1,0 +1,82 @@
+<mujoco model="wx250s">
+    <compiler angle="radian" meshdir="models/"  texturedir="images/" />
+    <size njmax="500" nconmax="100" />
+    <asset>
+        <mesh name="WXSA-250-M-1-Base" file="WXSA-250-M-1-Base.stl" scale="0.001 0.001 0.001" />
+        <mesh name="WXSA-250-M-2-Shoulder" file="WXSA-250-M-2-Shoulder.stl" scale="0.001 0.001 0.001" />
+        <mesh name="WXSA-250-M-3-UA" file="WXSA-250-M-3-UA.stl" scale="0.001 0.001 0.001" />
+        <mesh name="WXSA-250-M-4-UF" file="WXSA-250-M-4-UF.stl" scale="0.001 0.001 0.001" />
+        <mesh name="WXSA-250-M-5-LF" file="WXSA-250-M-5-LF.stl" scale="0.001 0.001 0.001" />
+        <mesh name="WXSA-250-M-6-Wrist" file="WXSA-250-M-6-Wrist.stl" scale="0.001 0.001 0.001" />
+        <texture name="texture" type="2d" file="interbotix_black.png"/>
+        <texture name="skybox" type="skybox" builtin="gradient" rgb1=".4 .6 .8" rgb2="0 0 0"
+               width="800" height="800" mark="random" markrgb="1 1 1"/>
+        <material name="mat_texture" texture="texture"/>
+        <material name="black" rgba="0.15 0.15 0.15 1.0"/>
+        <material name="red" rgba="0.15 0.15 0.15 1.0"/>
+        <material name="grey" rgba="0.15 0.15 0.15 1.0"/>
+    </asset>
+    <default>
+        <default class="large_joint">
+            <joint frictionloss='0.1' armature='1' damping='0.1'/>
+            <velocity kv="10" ctrllimited="true" ctrlrange="-3.1415928 3.1415928" forcelimited='true' forcerange='-10 10'/>
+        </default>
+        <default class="small_joint">
+            <joint frictionloss='0.1' armature='1' damping='0.1'/>
+            <velocity kv="10" ctrllimited="true" ctrlrange="-3.1415928 3.1415928" forcelimited='true' forcerange='-10 10'/>
+        </default>
+        <geom solref="0.002 1" solimp="0.95 0.99 0.001" conaffinity="1" friction="1.0 0.1 0.001" contype="1" condim="6" />
+    </default>
+    <worldbody>
+        <body name="base" pos="0 0 0" >
+            <site name="base_site" />
+            <geom quat="0.707107 0 0 0.707107" type="mesh" rgba="0.15 0.15 0.15 1" mesh="WXSA-250-M-1-Base" material="red" />
+            <body name="shoulder_link" pos="0 0 0.0716">
+                <inertial pos="2.23482e-05 4.14609e-05 0.0066287" quat="-0.491122 0.490302 0.508681 0.509556" mass="0.480879" diaginertia="0.000588946 0.000555655 0.000378999" />
+                <joint name="waist" class="large_joint" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14159 3.14159" />
+                <geom pos="0 0 -0.003" quat="0.707107 0 0 0.707107" type="mesh" rgba="0.15 0.15 0.15 1" mesh="WXSA-250-M-2-Shoulder" material="black" />
+                <body name="upper_arm_link" pos="0 0 0.03865">
+                    <inertial pos="0.0171605 2.725e-07 0.191323" quat="2.44288e-12 0.0665624 0 0.997782" mass="0.430811" diaginertia="0.00364425 0.003463 0.000399348" />
+                    <joint name="shoulder" class="large_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-1.88496 1.98968" />
+                    <geom quat="0.707107 0 0 0.707107" type="mesh" rgba="0.15 0.15 0.15 1" mesh="WXSA-250-M-3-UA" material="black" />
+                    <body name="upper_forearm_link" pos="0.04975 0 0.25" quat="0 1 0 0">
+                        <inertial pos="0.107963 0.000115876 0" quat="0.000980829 0.707106 -0.000980829 0.707106" mass="0.234589" diaginertia="0.000888 0.000887807 3.97035e-05" />
+                        <joint name="elbow" class="large_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-1.6057 2.14675" />
+                        <geom type="mesh" rgba="0.15 0.15 0.15 1" mesh="WXSA-250-M-4-UF" material="black" />
+                        <body name="lower_forearm_link" pos="0.175 0 0">
+                            <inertial pos="0.0374395 -0.00522252 0" quat="-0.0732511 0.703302 0.0732511 0.703302" mass="0.220991" diaginertia="0.0001834 0.000172527 5.88633e-05" />
+                            <joint name="forearm_roll" class="small_joint" pos="0 0 0" axis="1 0 0" limited="true" range="-3.14159 3.14159" />
+                            <geom type="mesh" rgba="0.15 0.15 0.15 1" mesh="WXSA-250-M-5-LF" material="black" />
+                            <body name="wrist_link" pos="0.075 0 0">
+                                <inertial pos="0.04236 1.0663e-05 -0.010577" quat="0.511007 -0.00129144 0.85957 -0.00305617" mass="0.084957" diaginertia="3.29057e-05 3.082e-05 2.68343e-05" />
+                                <joint name="wrist_angle" class="small_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-2.14675 1.74533" />
+                                <geom quat="0 -0.707107 0.707107 0" type="mesh" rgba="0.15 0.15 0.15 1" mesh="WXSA-250-M-6-Wrist" material="black" />
+                                <body name="gripper_link" pos="0.065 0 0" quat="0 -1 0 0">
+                                    <inertial pos="0.0325296 4.2061e-07 0.0090959" quat="4.5806e-06 0.787961 -2.3346e-05 0.615725" mass="0.110084" diaginertia="0.00307449 0.00306151 0.00304637" />
+                                    <joint name="wrist_rotate" class="small_joint" pos="0 0 0" axis="1 0 0" limited="true" range="-3.14159 3.14159" />
+                                    <site name="wrist_site"  quat="0.5 0.5 0.5 0.5" />
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    <actuator>
+        <velocity name="waist" joint="waist" class="large_joint" />
+        <velocity name="shoulder" joint="shoulder" class="large_joint" />
+        <velocity name="elbow" joint="elbow" class="large_joint" />
+        <velocity name="forearm_roll" joint="forearm_roll" class="small_joint" />
+        <velocity name="wrist_angle" joint="wrist_angle" class="small_joint" />
+        <velocity name="wrist_rotate" joint="wrist_rotate" class="small_joint" />
+    </actuator>
+    <contact>
+        <exclude body1='base' body2='shoulder_link'/>
+        <exclude body1='shoulder_link' body2='upper_arm_link'/>
+        <exclude body1='upper_arm_link' body2='upper_forearm_link'/>
+        <exclude body1='upper_forearm_link' body2='lower_forearm_link'/>
+        <exclude body1='lower_forearm_link' body2='wrist_link'/>
+        <exclude body1='wrist_link' body2='gripper_link'/>
+    </contact>
+</mujoco>
